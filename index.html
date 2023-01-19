@@ -77,7 +77,7 @@
           </div>
         </div>
       </section>
-      <section id="controls">
+      <section v-if="!endOfRound" id="controls">
         <button :disabled="endOfRound" @click="playerAttack">ATTACK</button>
         <button
           :disabled="isSPCooldown || endOfRound"
@@ -89,9 +89,11 @@
           HEAL
         </button>
         <button :disabled="endOfRound" @click="surrender">SURRENDER</button>
+        <button :disabled="!powerUp.canPowerUp || endOfRound" @click="powerUpButton" style="width: 27rem">{{powerUp.text}}</button>
       </section>
       <section id="log" class="container">
         <h2>{{ setResult }}</h2>
+        <div id="roundCounter"> ROUND: {{currRounds}} </div>
         <div
           style="
             display: flex;
@@ -112,6 +114,7 @@
             v-for="(log, index) in combatLog"
           >
             <div v-if="log.entity === 'Player'" class="log-div">
+              <span class="log-entity-span">{{ log.entity }}</span>
               <span style="font-weight: bold; color: #00a876">
                 {{ log.value }}
               </span>

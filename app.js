@@ -1,5 +1,10 @@
 function getRandomValue(max, min) {
-  return (Math.floor(Math.random() * (max + min)) + min) / 2
+  return Math.floor((Math.random() * (max + min)) + min / 2)
+}
+
+const starterButtonIndicatorPosition = () => {
+  const boundries = document.querySelector(`#facil`).getBoundingClientRect();
+  return Math.floor((boundries.left + boundries.right) / 2);
 }
 
 const app = Vue.createApp({
@@ -14,25 +19,38 @@ const app = Vue.createApp({
       combatLog: [],
       damageDealt: 0,
       damageReceived: 0,
-      centerOfButton: 687.5,
+      centerOfButton: -200,
       difficultyValue: 0,
+      damageIncrease: 0,
 
       // Flags
       isSPCooldown: false,
       isHealCooldown: false,
+      powerUp: {canPowerUp: false, isPoweredUp: false, text: 'POWER UP'},
     }
   },
   watch: {
     currRounds(value) {
-      if (value === this.specialAttackRound + 4 && this.isSPCooldown) {
-        this.isSPCooldown = false
+      if(value > 0){
+        if (value === this.specialAttackRound + 4 && this.isSPCooldown) {
+          this.isSPCooldown = false
+        }
+        if (value === this.healRound + 3 && this.isHealCooldown) {
+          this.isHealCooldown = false
+        }
       }
-      if (value === this.healRound + 3 && this.isHealCooldown) {
-        this.isHealCooldown = false
+      if(value >= 3 && !this.powerUp.isPoweredUp){
+        this.powerUp.canPowerUp = true;
+        this.powerUp.isPoweredUp = true;
       }
     },
   },
   methods: {
+    powerUpButton(){
+      this.damageIncrease = 3;
+      this.powerUp.canPowerUp = false;
+      this.powerUp =  {canPowerUp: true, canPowerUp: false, text: 'POWERED UP!'}
+    },
     restart() {
       this.monsterHealth = 100
       this.playerHealth = 100
@@ -42,14 +60,14 @@ const app = Vue.createApp({
       this.combatLog = []
       this.damageDealt = 0
       this.damageReceived = 0
-      this.centerOfButton = 611.9318161010742
-      this.difficultyValue = 0
+      this.centerOfButton = starterButtonIndicatorPosition();
       this.isSPCooldown = false
       this.isHealCooldown = false
+      this.powerUp = {...rest, isPoweredUp: false, text: 'POWER UP'}
     },
     calculateButtonCenter(event) {
       const boundries = event.target.getBoundingClientRect()
-      this.centerOfButton = (boundries.left + boundries.right) / 2
+      this.centerOfButton = Math.floor((boundries.left + boundries.right) / 2);
       switch (event.target.id) {
         case 'facil':
           this.difficultyValue = 0.5
@@ -80,8 +98,12 @@ const app = Vue.createApp({
       }
     },
     playerAttack() {
+      if(this.difficultyValue === 0){
+        this.difficultyValue = 0.5;
+        this.centerOfButton = starterButtonIndicatorPosition();
+      }
       this.currRounds++
-      const playerDamage = getRandomValue(15, 3)
+      const playerDamage = getRandomValue(15 + this.damageIncrease, 3 + this.damageIncrease)
       this.monsterHealth -= playerDamage
       this.damageDealt += playerDamage
       this.addLog('Player', playerDamage, 'ATK')
@@ -129,9 +151,6 @@ const app = Vue.createApp({
     surrender() {
       this.playerHealth = 0
     },
-    checkForEntity(entity) {
-      console.log(entity)
-    },
   },
   computed: {
     difficultyButtons() {
@@ -147,7 +166,9 @@ const app = Vue.createApp({
       }
     },
     endOfRound() {
-      return !(this.monsterHealth * this.playerHealth)
+      if(!(this.monsterHealth * this.playerHealth)){
+        return true
+      }
     },
     calculatePlayerHealth() {
       return {
@@ -201,10 +222,6 @@ const app = Vue.createApp({
 
 app.mount('#game')
 
-document.addEventListener('click', (event) => {
-  console.log(
-    (event.target.getBoundingClientRect().left +
-      event.target.getBoundingClientRect().right) /
-      2
-  )
+document.addEventListener('resize', (event) => {
+  calculateButtonCenter(event);
 })

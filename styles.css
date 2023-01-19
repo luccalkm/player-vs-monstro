@@ -162,3 +162,15 @@ button:disabled {
   width: 50%;
   margin: 20px auto;
 }
+ #roundCounter {
+  font-weight: 600;
+  background: #880017;
+  padding: 12px;
+  color: white;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: 0.3s;
+ }
