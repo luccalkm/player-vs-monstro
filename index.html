@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue Basics</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/vue@next" defer></script>
+    <script src="app.vue" defer></script>
+  </head>
+  <body>
+    <div id="game">
+      <header style="display: flex; justify-content: center">
+        <h1>Monster Slayer</h1>
+        <button
+          @click="restart"
+          style="
+            position: absolute;
+            left: 90%;
+            width: auto;
+            height: auto;
+            background-color: white;
+            color: #880017;
+          "
+        >
+          RESTART
+        </button>
+      </header>
+      <span :style="difficultySelection"
+        ><i class="fa-regular fa-hand-point-up"></i
+      ></span>
+      <div
+        style="
+          width: 50%;
+          display: flex;
+          justify-content: center;
+          margin: 0 auto;
+        "
+      >
+        <button
+          :disabled="difficultyButtons.status"
+          id="facil"
+          @click="calculateButtonCenter($event)"
+          :class="difficultyButtons.class"
+        >
+          Facil
+        </button>
+        <button
+          :disabled="difficultyButtons.status"
+          id="medio"
+          @click="calculateButtonCenter($event)"
+          :class="difficultyButtons.class"
+        >
+          Médio
+        </button>
+        <button
+          :disabled="difficultyButtons.status"
+          id="dificil"
+          @click="calculateButtonCenter($event)"
+          :class="difficultyButtons.class"
+        >
+          Dificil
+        </button>
+      </div>
+      <section id="monster" class="container">
+        <h2>Monster Health</h2>
+        <div class="healthbar">
+          <div :style="calculateMonsterHealth" class="healthbar__value">
+            <span class="healthNumber">{{ monsterHealth }}</span>
+          </div>
+        </div>
+      </section>
+      <section id="player" class="container">
+        <h2>Your Health</h2>
+        <div class="healthbar">
+          <div :style="calculatePlayerHealth" class="healthbar__value">
+            <span class="healthNumber">{{ playerHealth }}</span>
+          </div>
+        </div>
+      </section>
+      <section id="controls">
+        <button :disabled="endOfRound" @click="playerAttack">ATTACK</button>
+        <button
+          :disabled="isSPCooldown || endOfRound"
+          @click="specialPlayerAttack"
+        >
+          SPECIAL ATTACK
+        </button>
+        <button :disabled="isHealCooldown || endOfRound" @click="heal">
+          HEAL
+        </button>
+        <button :disabled="endOfRound" @click="surrender">SURRENDER</button>
+      </section>
+      <section id="log" class="container">
+        <h2>{{ setResult }}</h2>
+        <div
+          style="
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 80%;
+            margin: 0 auto;
+          "
+        >
+          <h3>Dano total dado: {{ damageDealt }}</h3>
+          <h3>Dano total recebido: {{ damageReceived }}</h3>
+        </div>
+        <ul>
+          <li
+            key="index"
+            style="width: 100%; margin: 0 auto"
+            v-for="(log, index) in combatLog"
+          >
+            <div
+              v-if="log.entity === 'Player'"
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                width: 50%;
+                margin: 20px auto;
+              "
+            >
+              <span
+                style="
+                  font-weight: bold;
+                  background-color: #00a876;
+                  color: white;
+                  padding: 4px 8px;
+                  border-radius: 5px;
+                "
+                >{{ log.entity }}</span
+              >
+              <span style="font-weight: bold; color: #00a876">
+                {{ log.value }}
+              </span>
+              <span style="font-weight: bold">{{ log.message }}</span>
+            </div>
+            <div
+              v-else
+              style="
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                width: 50%;
+                margin: 20px auto;
+              "
+            >
+              <span
+                style="
+                  font-weight: bold;
+                  background-color: #880017;
+                  color: white;
+                  padding: 4px 8px;
+                  border-radius: 5px;
+                "
+                >{{ log.entity }}</span
+              >
+              <span style="font-weight: bold; color: #880017">
+                {{ log.value }}
+              </span>
+              <span style="font-weight: bold">{{ log.message }}</span>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </body>
+</html>
