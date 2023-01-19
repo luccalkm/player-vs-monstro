@@ -144,3 +144,21 @@ button:disabled {
 .disabled:hover {
   cursor: not-allowed;
 }
+
+.restartButton {
+  position: absolute;
+  left: 90%;
+  width: auto;
+  height: auto;
+  background-color: white;
+  color: #880017;
+}
+
+.log-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+  margin: 20px auto;
+}

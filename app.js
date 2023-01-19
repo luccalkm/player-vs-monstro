@@ -14,7 +14,7 @@ const app = Vue.createApp({
       combatLog: [],
       damageDealt: 0,
       damageReceived: 0,
-      centerOfButton: 611.9318161010742,
+      centerOfButton: 687.5,
       difficultyValue: 0,
 
       // Flags
@@ -61,7 +61,6 @@ const app = Vue.createApp({
           this.difficultyValue = 3
           break
       }
-      console.log(this.difficultyValue)
     },
     addLog(who, value, action) {
       switch (action) {
@@ -201,3 +200,11 @@ const app = Vue.createApp({
 })
 
 app.mount('#game')
+
+document.addEventListener('click', (event) => {
+  console.log(
+    (event.target.getBoundingClientRect().left +
+      event.target.getBoundingClientRect().right) /
+      2
+  )
+})
