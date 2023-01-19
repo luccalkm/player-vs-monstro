@@ -25,17 +25,10 @@
         <h1>Monster Slayer</h1>
         <button @click="restart" class="restartButton">RESTART</button>
       </header>
-      <span :style="difficultySelection"
-        ><i class="fa-regular fa-hand-point-up"></i
-      ></span>
-      <div
-        style="
-          width: 50%;
-          display: flex;
-          justify-content: center;
-          margin: 0 auto;
-        "
-      >
+      <div id="difficultyMenu">
+        <span id="fingerIdentificator" :style="difficultySelection"
+          ><i class="fa-regular fa-hand-point-up"></i
+        ></span>
         <button
           :disabled="difficultyButtons.status"
           id="facil"
@@ -89,11 +82,17 @@
           HEAL
         </button>
         <button :disabled="endOfRound" @click="surrender">SURRENDER</button>
-        <button :disabled="!powerUp.canPowerUp || endOfRound" @click="powerUpButton" style="width: 27rem">{{powerUp.text}}</button>
+        <button
+          :disabled="!powerUp.canPowerUp || endOfRound"
+          @click="powerUpButton"
+          style="width: 27rem"
+        >
+          {{powerUp.text}}
+        </button>
       </section>
       <section id="log" class="container">
         <h2>{{ setResult }}</h2>
-        <div id="roundCounter"> ROUND: {{currRounds}} </div>
+        <div id="roundCounter">ROUND: {{currRounds}}</div>
         <div
           style="
             display: flex;

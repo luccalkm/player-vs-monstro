@@ -162,7 +162,7 @@ button:disabled {
   width: 50%;
   margin: 20px auto;
 }
- #roundCounter {
+#roundCounter {
   font-weight: 600;
   background: #880017;
   padding: 12px;
@@ -173,4 +173,26 @@ button:disabled {
   justify-content: center;
   margin: 0 auto;
   transition: 0.3s;
- }
+}
+
+#difficultyMenu {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+}
+#fingerIdentificator {
+  animation: 1s infinite pointingAnimation;
+}
+
+@keyframes pointingAnimation {
+  0% {
+    top: 138px;
+  }
+  50% {
+    top: 130px;
+  }
+  100% {
+    top: 138px;
+  }
+}
